@@ -1,0 +1,7 @@
+# Note, needs to be run as root (i.e., sudo: yes)
+- name: Fetch the Oracle 1.8.0 jdk rpm
+  shell: 'creates={{jdk_local_path}} wget --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" {{jdk_url}} -O {{jdk_local_path}}'
+
+- name: Install java 1.8.0
+  yum: name={{jdk_local_path}} state=installed
+

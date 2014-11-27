@@ -1,0 +1,28 @@
+# Note, needs to be run as root (i.e., sudo: yes)
+- name: Add webupd8 repo apt-key
+  apt_key: url=http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0xC2518248EEA14886 state=present
+  tags: java
+
+- name: add webupd8team java repository for Ubuntu
+  apt_repository: repo='ppa:webupd8team/java'
+  tags: java
+
+- name: autoaccept license for java
+  shell: executable=/bin/bash debconf-set-selections <<< "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true"
+  tags: java
+
+- name: install or update Oracle Java 8 JDK via apt
+  apt: name={{ item }} update_cache=yes state=latest install_recommends=yes
+  with_items:
+    - oracle-java8-installer
+    - oracle-java8-set-default
+    - ca-certificates
+  tags: java
+
+- name: set fact jdk_installed
+  set_fact: jdk_installed=true
+  tags: java
+
+- name: install or update maven
+  apt: name=maven update_cache=yes state=latest install_recommends=yes
+  tags: java
