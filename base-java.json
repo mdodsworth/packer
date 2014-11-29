@@ -22,7 +22,7 @@
   "provisioners": [
     {
       "type": "shell",
-      "pause_before": "30s",
+      "pause_before": "20s",
       "inline": [ "sudo apt-get install -y ansible" ]
     },
     {
