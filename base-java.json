@@ -2,9 +2,9 @@
   "builders": [{
     "type": "amazon-ebs",
     "region": "us-west-1",
-    "source_ami": "ami-4b6f650e",
+    "source_ami": "ami-d1180894",
     "instance_type": "t2.micro",
-    "ssh_username": "ec2-user",
+    "ssh_username": "ubuntu",
     "ami_name": "packer-example {{timestamp}}",
     "associate_public_ip_address": true,
     "vpc_id": "vpc-71dc2e14",
@@ -17,24 +17,25 @@
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
     "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now"
-  }],
+    }
+  ],
   "provisioners": [
     {
       "type": "shell",
       "pause_before": "30s",
-      "only": ["amazon-ebs"],
-      "inline": [
-        "sudo yum install ansible --enablerepo=epel --enablerepo=epel-testing -y" ]
-    },
-    {
-      "type": "shell",
-      "only": ["virtualbox-ovf"],
-      "inline": [
-        "sudo apt-get install -y ansible" ]
+      "inline": [ "sudo apt-get install -y ansible" ]
     },
     {
       "type": "ansible-local",
       "playbook_file": "local.yml",
       "playbook_dir": "."
-  }]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "only": [ "virtualbox-ovf" ],
+      "output": "packer_{{.ArtifactId}}_{{.Provider}}.box"
+    }
+  ]
 }

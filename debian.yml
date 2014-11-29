@@ -1,4 +1,7 @@
 # Note, needs to be run as root (i.e., sudo: yes)
+- name: update apt cache
+  apt: update_cache=yes cache_valid_time=3600
+
 - name: Add webupd8 repo apt-key
   apt_key: url=http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0xC2518248EEA14886 state=present
   tags: java
