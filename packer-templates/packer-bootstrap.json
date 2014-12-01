@@ -12,6 +12,11 @@
     "tags": { "role": "packer" }
   },
   {
+    "type": "amazon-chroot",
+    "source_ami": "ami-d1180894",
+    "ami_name": "trusty-packer-{{timestamp}}"
+  },
+  {
     "type": "docker",
     "image": "ubuntu:14.04.1",
     "commit": true
@@ -29,6 +34,15 @@
   "provisioners": [
     {
       "type": "shell",
+      "only": [ "amazon-chroot" ],
+      "inline": [
+        "echo '#!/bin/sh' > /usr/sbin/policy-rc.d",
+        "echo 'exit 101' >> /usr/sbin/policy-rc.d",
+        "chmod a+x /usr/sbin/policy-rc.d"
+      ]
+    },
+    {
+      "type": "shell",
       "pause_before": "20s",
       "inline": [ "sudo apt-get update && sudo apt-get install -y ansible" ]
     },
@@ -38,6 +52,11 @@
       "playbook_file": "ansible/provision.yml",
       "inventory_file": "ansible/packer-hosts",
       "extra_arguments": [ "--limit=packer"]
+    },
+    {
+      "type": "shell",
+      "only": [ "amazon-chroot" ],
+      "inline": [ "rm -f /usr/sbin/policy-rc.d" ]
     }
   ],
   "post-processors": [
