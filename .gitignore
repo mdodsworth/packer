@@ -7,3 +7,4 @@
 
 # ignore any created vagrant boxes
 *.box
+/output-virtualbox-ovf/
