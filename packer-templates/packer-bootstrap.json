@@ -9,7 +9,7 @@
     "associate_public_ip_address": true,
     "vpc_id": "vpc-71dc2e14",
     "subnet_id": "subnet-a25d94c7",
-    "tags": [ "role", "packer" ]
+    "tags": { "role": "packer" }
   },
   {
     "type": "docker",
