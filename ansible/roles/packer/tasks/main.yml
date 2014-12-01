@@ -51,8 +51,9 @@
     validate_certs: false # see https://github.com/ansible/ansible/issues/6904
 
 - name: Register box_sha256sum
-  shell: grep /tmp/trusty-server-cloudimg-amd64-vagrant-disk1.box SHA256SUMS | cut -d ' ' -f 1
+  shell: grep trusty-server-cloudimg-amd64-vagrant-disk1.box /tmp/SHA256SUMS | cut -d ' ' -f 1
   register: box_sha256sum
+  failed_when: box_sha256sum.rc != 0
 
 # Include the ubuntu 14.04 vagrant box as a base for building the packer build box
 - name: Download the ubuntu 14.04 vagrant box
