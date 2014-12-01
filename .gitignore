@@ -2,4 +2,8 @@
 *.un~
 *.swp
 
-.vagrant
+.vagrant/
+/vagrant-boxes/
+
+# ignore any created vagrant boxes
+*.box

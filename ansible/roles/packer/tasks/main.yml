@@ -1,0 +1,54 @@
+---
+- name: Install unzip, bsdtar, DKMS and docker packages
+  sudo: true
+  apt: name={{ item }}
+  with_items:
+    - bsdtar
+    - dkms
+    - docker.io
+    - git
+    - unzip
+
+# Fetch, unzip and install Packer
+- name: Download Packer
+  get_url:
+    url: https://dl.bintray.com/mitchellh/packer/packer_0.7.2_linux_amd64.zip
+    dest: /tmp/packer.zip
+    sha256sum: 2e0a7971d0df81996ae1db0fe04291fb39a706cc9e8a2a98e9fe735c7289379f
+
+- name: Unzip Packer into /usr/local/bin
+  sudo: true
+  unarchive: src=/tmp/packer.zip dest=/usr/local/bin copy=false
+
+# Install virtualbox
+- name: Add virtualbox repo for trusty
+  sudo: true
+  apt_repository: repo='deb http://download.virtualbox.org/virtualbox/debian trusty contrib'
+
+- name: Add VirtualBox repo signing key
+  sudo: true
+  apt_key: url=http://download.virtualbox.org/virtualbox/debian/oracle_vbox.asc
+
+- name: Install virtualbox package
+  sudo: true
+  apt: name=virtualbox-4.3 update_cache=true
+
+# Clone the packer repo
+- name: Clone the packer repository
+  git: repo=https://github.com/mdodsworth/packer.git dest=~/packer
+
+# Include the ubuntu 14.04 vagrant box as a base for building the packer build box
+- name: Download the ubuntu 14.04 vagrant box
+  get_url:
+    url: https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box
+    dest: /tmp/trusty-vagrant.box
+    sha256sum: f8d93e17b245305eb1bba4dff33855607a166c5897da53026c8783e375f1dfc8
+    validate_certs: false # see https://github.com/ansible/ansible/issues/6904
+
+# Create a vagrant-boxes directory for the box to be expanded into
+- name: Create vagrant-boxes directory
+  command: mkdir -p ~/packer/vagrant-boxes
+
+# Extract the box into the newly created directory (this'll leave ~/vagrant-boxes/box.ovf)
+- name: Extract trusty-vagrant box
+  command: bsdtar -v -x -m -C ~/packer/vagrant-boxes -f /tmp/trusty-vagrant.box

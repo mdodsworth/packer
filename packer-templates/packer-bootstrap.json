@@ -5,17 +5,24 @@
     "source_ami": "ami-d1180894",
     "instance_type": "t2.micro",
     "ssh_username": "ubuntu",
-    "ami_name": "packer-example {{timestamp}}",
+    "ami_name": "trusty-packer-{{timestamp}}",
     "associate_public_ip_address": true,
     "vpc_id": "vpc-71dc2e14",
-    "subnet_id": "subnet-a25d94c7"
+    "subnet_id": "subnet-a25d94c7",
+    "tags": [ "role", "packer" ]
+  },
+  {
+    "type": "docker",
+    "image": "ubuntu:14.04.1",
+    "commit": true
   },
   {
     "type": "virtualbox-ovf",
-    "source_path": "/Users/mdodsworth/.vagrant.d/boxes/trusty64/0/virtualbox/box.ovf",
+    "source_path": "vagrant-boxes/box.ovf",
     "ssh_wait_timeout": "1m",
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
+    "headless": true,
     "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now"
     }
   ],
@@ -23,19 +30,21 @@
     {
       "type": "shell",
       "pause_before": "20s",
-      "inline": [ "sudo apt-get install -y ansible" ]
+      "inline": [ "sudo apt-get update && sudo apt-get install -y ansible" ]
     },
     {
       "type": "ansible-local",
-      "playbook_file": "local.yml",
-      "playbook_dir": "."
+      "playbook_dir": "ansible",
+      "playbook_file": "ansible/provision.yml",
+      "inventory_file": "ansible/packer-hosts",
+      "extra_arguments": [ "--limit=packer"]
     }
   ],
   "post-processors": [
     {
       "type": "vagrant",
-      "only": [ "virtualbox-ovf" ],
-      "output": "packer_{{.ArtifactId}}_{{.Provider}}.box"
+      "except": [ "docker" ],
+      "output": "trusty-packer-{{.Provider}}-{{timestamp}}.box"
     }
   ]
 }

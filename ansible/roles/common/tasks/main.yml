@@ -1,0 +1,5 @@
+---
+# Install python-apt via 'raw' -- see https://github.com/ansible/ansible/pull/6518
+- name: Install python-apt                                                                                               
+  sudo: true                                                                                                             
+  raw: apt-get update && apt-get install python-apt python-pycurl -y -q   
