@@ -44,7 +44,7 @@
     },
     {
       "type": "shell",
-      "pause_before": "20s",
+      "pause_before": "10s",
       "inline": [ "sudo apt-get update && sudo apt-get install -y ansible" ]
     },
     {
