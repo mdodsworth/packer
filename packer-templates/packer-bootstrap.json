@@ -14,7 +14,8 @@
   {
     "type": "amazon-chroot",
     "source_ami": "ami-d1180894",
-    "ami_name": "trusty-packer-{{timestamp}}"
+    "ami_name": "trusty-packer-{{timestamp}}",
+    "command_wrapper": "sudo {{.Command}}"
   },
   {
     "type": "docker",
@@ -62,7 +63,7 @@
   "post-processors": [
     {
       "type": "vagrant",
-      "except": [ "docker" ],
+      "except": [ "docker", "amazon-chroot" ],
       "output": "trusty-packer-{{.Provider}}-{{timestamp}}.box"
     }
   ]
