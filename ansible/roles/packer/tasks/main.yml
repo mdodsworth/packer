@@ -1,14 +1,17 @@
 ---
-- name: Install unzip, bsdtar, DKMS and docker packages
+- name: Install unzip, bsdtar, git, docker and vim packages
   sudo: true
   apt: name={{ item }}
   with_items:
     - bsdtar
-    - dkms
     - docker.io
     - git
     - unzip
     - vim
+
+- name: Add {{ ansible_user_id }} to docker group
+  sudo: true
+  user: name={{ ansible_user_id }} groups=docker append=yes
 
 # Fetch, unzip and install Packer
 - name: Download Packer
@@ -32,7 +35,10 @@
 
 - name: Install virtualbox package
   sudo: true
-  apt: name=virtualbox-4.3 update_cache=true
+  apt: name={{item}} update_cache=true
+  with_items:
+    - virtualbox-4.3
+    - dkms
 
 # Clone the packer repo
 - name: Clone the packer repository

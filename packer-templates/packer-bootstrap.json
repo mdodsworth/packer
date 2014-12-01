@@ -8,8 +8,8 @@
     "ami_name": "trusty-packer-{{timestamp}}",
     "enhanced_networking": true,
     "associate_public_ip_address": true,
-    "vpc_id": "vpc-71dc2e14",
-    "subnet_id": "subnet-a25d94c7",
+    "vpc_id": "vpc-9df409f8",
+    "subnet_id": "subnet-749c9432",
     "tags": { "role": "packer" }
   },
   {
