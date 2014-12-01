@@ -44,12 +44,22 @@
 - name: Clone the packer repository
   git: repo=https://github.com/mdodsworth/packer.git dest=~/packer
 
+- name: Download the ubuntu 14.04 vagrant box sha256sums
+  get_url:
+    url: https://cloud-images.ubuntu.com/vagrant/trusty/current/SHA256SUMS
+    dest: /tmp/SHA256SUMS
+    validate_certs: false # see https://github.com/ansible/ansible/issues/6904
+
+- name: Register box_sha256sum
+  shell: grep /tmp/trusty-server-cloudimg-amd64-vagrant-disk1.box SHA256SUMS | cut -d ' ' -f 1
+  register: box_sha256sum
+
 # Include the ubuntu 14.04 vagrant box as a base for building the packer build box
 - name: Download the ubuntu 14.04 vagrant box
   get_url:
     url: https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box
     dest: /tmp/trusty-vagrant.box
-    sha256sum: f8d93e17b245305eb1bba4dff33855607a166c5897da53026c8783e375f1dfc8
+    sha256sum: '{{ box_sha256sum }}'
     validate_certs: false # see https://github.com/ansible/ansible/issues/6904
 
 # Create a vagrant-boxes directory for the box to be expanded into
