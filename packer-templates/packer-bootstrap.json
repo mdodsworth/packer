@@ -6,6 +6,7 @@
     "instance_type": "t2.micro",
     "ssh_username": "ubuntu",
     "ami_name": "trusty-packer-{{timestamp}}",
+    "enhanced_networking": true,
     "associate_public_ip_address": true,
     "vpc_id": "vpc-71dc2e14",
     "subnet_id": "subnet-a25d94c7",
@@ -15,6 +16,8 @@
     "type": "amazon-chroot",
     "source_ami": "ami-d1180894",
     "ami_name": "trusty-packer-{{timestamp}}",
+    "ami_virtualization_type": "hvm",
+    "enhanced_networking": true,
     "command_wrapper": "sudo {{.Command}}"
   },
   {
