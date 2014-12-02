@@ -18,6 +18,7 @@
     "ami_name": "trusty-packer-{{timestamp}}",
     "ami_virtualization_type": "hvm",
     "enhanced_networking": true,
+    "mount_path": "~/mnt",
     "command_wrapper": "sudo {{.Command}}"
   },
   {
