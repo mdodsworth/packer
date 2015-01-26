@@ -1,20 +1,20 @@
 {
   "builders": [{
     "type": "amazon-ebs",
-    "region": "us-west-1",
-    "source_ami": "ami-d1180894",
+    "region": "us-east-1",
+    "source_ami": "ami-9a562df2",
     "instance_type": "t2.micro",
     "ssh_username": "ubuntu",
     "ami_name": "trusty-packer-{{timestamp}}",
     "enhanced_networking": true,
     "associate_public_ip_address": true,
-    "vpc_id": "vpc-9df409f8",
-    "subnet_id": "subnet-749c9432",
+    "vpc_id": "vpc-b3afc4d6",
+    "subnet_id": "subnet-8347f3da",
     "tags": { "role": "packer" }
   },
   {
     "type": "amazon-chroot",
-    "source_ami": "ami-d1180894",
+    "source_ami": "ami-9a562df2",
     "ami_name": "trusty-packer-{{timestamp}}",
     "ami_virtualization_type": "hvm",
     "enhanced_networking": true,
